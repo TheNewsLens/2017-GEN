@@ -17,7 +17,7 @@ export default class VideoPlayer extends Component {
   _initVideo(){
     let playerInstance = jwplayer("video-player");
     playerInstance.setup({
-      file:"/video/hate_life_mp4_h264_aac_hd_8.mp4",
+      file:"/video/GEN_Hackthon.mp4",
       image:"/img/LOGO-01.jpg",
       "height": 380,
       "width": "100%",
