@@ -18,13 +18,13 @@ export default class VideoPlayer extends Component {
     let playerInstance = jwplayer("video-player");
     playerInstance.setup({
       file:"/video/hate_life_mp4_h264_aac_hd_8.mp4",
-      image:"/img/hate_life.jpeg",
-      "height": 360,
+      image:"/img/LOGO-01.jpg",
+      "height": 380,
       "width": "100%",
       displaytitle: false,
       controls: true,
       primary: 'html5',
-      mute:'false',
+      mute: true,
       autostart: false,
     });
     this.addVideoListener();

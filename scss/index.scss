@@ -1,5 +1,5 @@
 $meta-width: 400;
-$meta-height: 100;
+$meta-height: 95;
 
 @mixin transition($transition...) {
   -moz-transition:    $transition;
@@ -12,57 +12,111 @@ body {
   background-color: #1a1a1a;
 }
 #video-container {
+  padding-top: 60px;
   display:flex;
   flex-direction: row;
+  justify-content: center;
 }
 
 #video-player {
   //display: inline-block;
   max-width: 600px;
-  height: 360px !important;
+  height: 400px !important;
 }
 
 #video-meta-container {
+  position: relative;
   //display: inline-block;
   flex-direction: column;
   width: #{$meta-width}px;
   margin: 0 0 0 20px;
-
-  .active {
-    .video-label {
-      pointer-events: initial;
+  height: 400px;
+  overflow: scroll;
+  .video-meta.active {
+    //.video-label, .video-meta, .video-meta-time {
+      //pointer-events: initial;
       opacity: 1;
-    }
-    .video-meta {
-      opacity: 1;
-    }
+    //}
+  }
+  .video-label, .video-meta, .video-meta-time {
+    @include transition(all .35s ease-in-out);
   }
 
   .video-label {
     cursor: pointer;
     position: absolute;
     opacity: 0;
-    pointer-events: none;
-    @include transition(all .5s ease-in-out);
   }
 
   .video-meta {
-    margin: 10px 0;
-    height: #{$meta-height}px;
+    background: rgba(255,255,255, 0.1);
+    padding: 3px 10px;
+    margin: 5px 0;
     opacity: 0.4;
-    @include transition(all .35s ease-in-out);
     &:hover {
       opacity: 0.8;
-      &.google-map {
+      .google-map {
         height: 200px;
       }
     }
+  }
+
+  .video-meta-time {
+    position: relative;
+    top: 35px;
+    left: 10px;
+    margin-top: -25px;
+    z-index: 5;
+    pointer-events: none;
+    color: #fff;
+    opacity: 0.4;
+  }
+  .google-map, .wiki {
+    height: #{$meta-height}px;
+    margin-top: 8px;
   }
   .google-map {
     &:before {
       display: block;
       content: ' ';
       padding-bottom: percentage($meta-height/$meta-width);
+    }
+  }
+  .wiki {
+    .wiki-logo {
+      float: left;
+      margin-top: 15px;
+      max-width: 80px;
+      max-height: 100px;
+      img {
+        width: 100%;
+      }
+    }
+    .text, .title {
+      padding-left: 10px;
+    }
+    .link {
+      color: #486dff;
+      text-decoration: none;
+      padding: 0 5px;
+    }
+    .title {
+      margin-top: 5px;
+      display: inline-block;
+      color: #fff;
+    }
+    .text {
+      margin-top: 5px;
+      line-height: 18px;
+      font-size: 12px;
+      cursor: none;
+      text-decoration: none;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
     }
   }
 }
