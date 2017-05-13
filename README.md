@@ -16,6 +16,8 @@ npm run install
 npm run dev
 ```
 
+visit http://localhost:9000
+
 ### 3. Build Bundle
 
 ```
