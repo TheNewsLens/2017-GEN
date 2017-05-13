@@ -1,5 +1,13 @@
+$video-height: 345px;
 $meta-width: 400;
-$meta-height: 95;
+$meta-height: 80;
+
+$main-color: rgba(62, 219, 255, 0.9);
+$main: #050307;
+$meta-bg: #444444;
+$meta-type-bg: rgba(25,25,25,0.9);
+$meta-box-bg: #333333;
+$text: #FFFFFF;
 
 @mixin transition($transition...) {
   -moz-transition:    $transition;
@@ -8,11 +16,131 @@ $meta-height: 95;
   transition:         $transition;
 }
 
-body {
-  background-color: #1a1a1a;
+* {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+body {
+  padding: 0;
+  margin: 0;
+  background-color: $main;
+  background-image: url('/img/bg.png');
+  background-position: center 20%;
+  background-repeat: no-repeat;
+  color: $text;
+  text-decoration: none;
+}
+
+.bar {
+  width: 100%;
+  height: 80px;
+  background: #2B2B2B;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .logo {
+    display: inline-block;
+    padding: 20px 50px;
+    //width: 10%;
+  }
+  .placeholder {
+    width: 200px;
+  }
+  .menu {
+    display: flex;
+    flex-direction: row;
+    //width: 20%;
+    h5 {
+      font-weight: normal;
+      letter-spacing: 1.5px;
+      padding: 0 20px;
+      font-size: 20px;
+      line-height: 13px;
+      &.active {
+        color: $main-color;
+      }
+    }
+  }
+  .hamburger {
+    padding: 25px 50px 0;
+    //width: 5%;
+  }
+}
+
+.video-info-container {
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  .video-info-box, .video-vote-box {
+    margin-top: 10px;
+    height: 150px;
+    background-color: rgba(33,33,33, 0.8);
+  }
+  .video-info-box {
+    position: relative;
+    width: 600px;
+  }
+  .video-vote-box {
+    width: #{$meta-width}px;
+    margin-left: 10px;
+  }
+  .video-title {
+    padding: 30px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+  }
+  .video-view {
+    padding: 30px 20px;
+    font-weight: 200;
+    font-size: 12px;
+    letter-spacing: 1.1px;
+  }
+  .share {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 0 10px;
+    img {
+      padding: 10px 10px;
+    }
+  }
+  .short-name {
+    font-size: 11px;
+    padding: 10px;
+    letter-spacing: 1.1px;
+  }
+  .vote-title {
+    padding: 5px 40px;
+  }
+  .vote-bar {
+    &:before {
+      content: ' ';
+      width: 160px;
+      height: 2px;
+      margin: 0 40px 20px 0px;
+      background: $main-color;
+      border-radius: 2px;
+      display: inline-block;
+    }
+    width: 200px;
+    height: 2px;
+    margin: 20px 40px 20px 160px;
+    background: #606060;
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .vote-option {
+    margin-left: 230px;
+    //padding-top: 30px;
+    img {
+      padding: 0 5px;
+    }
+  }
+}
+
 #video-container {
-  padding-top: 60px;
+  padding-top: 35px;
   display:flex;
   flex-direction: row;
   justify-content: center;
@@ -21,102 +149,270 @@ body {
 #video-player {
   //display: inline-block;
   max-width: 600px;
-  height: 400px !important;
+  height: $video-height !important;
 }
 
 #video-meta-container {
+  background-color: $meta-bg;
   position: relative;
   //display: inline-block;
   flex-direction: column;
   width: #{$meta-width}px;
-  margin: 0 0 0 20px;
-  height: 400px;
+  margin: 0 0 0 10px;
+  height: $video-height;
   overflow: scroll;
-  .video-meta.active {
-    //.video-label, .video-meta, .video-meta-time {
-      //pointer-events: initial;
-      opacity: 1;
-    //}
-  }
-  .video-label, .video-meta, .video-meta-time {
-    @include transition(all .35s ease-in-out);
-  }
+  overflow-x: hidden;
 
-  .video-label {
-    cursor: pointer;
-    position: absolute;
-    opacity: 0;
-  }
-
-  .video-meta {
-    background: rgba(255,255,255, 0.1);
-    padding: 3px 10px;
-    margin: 5px 0;
+  .video-meta-box {
+    height: #{$meta-height}px;
+    background: $meta-box-bg;
+    border: 5px solid $meta-bg;
+    margin-bottom: -5px;
     opacity: 0.4;
     &:hover {
       opacity: 0.8;
       .google-map {
-        height: 200px;
+        //height: 200px;
+      }
+    }
+    &.active, &.show {
+      opacity: 1;
+    }
+    &.show {
+      .long-text {
+        display: block;
+      }
+      .video-type {
+        width: 0;
+        //height: 0;
+        .img {
+          display: none;
+        }
+      }
+      .filter {
+        display: none;
+        pointer-events: none;
+        //opacity: 0;
+        //height: 0 !important;
+      }
+      .video-meta {
+        cursor: initial;
+      }
+      // MAP
+      &.map, .map.video-meta, .google-map, &.wiki, .wiki.video-meta, &.article, .article.video-meta{
+        height: 200px !important;
+      }
+      &.infographic, .video-meta.infographic {
+        height: inherit;
+        position: initial;
+        overflow: visible;
+        margin-bottom: -56px;
+        background: none;
+        .title {
+          left: 40px;
+          width: initial;
+        }
+      }
+      .video-meta.wiki, .video-meta.article {
+        height: auto;
+        .title {
+          margin-left: 40px;
+          width: initial;
+        }
+        .text {
+          font-size: 13px;
+          -webkit-line-clamp: 8;
+        }
+        .hide-link {
+          display: block;
+        }
+        margin-left: 0;
+        width: calc(100% - 30px);
       }
     }
   }
 
-  .video-meta-time {
-    position: relative;
-    top: 35px;
-    left: 10px;
-    margin-top: -25px;
-    z-index: 5;
-    pointer-events: none;
-    color: #fff;
-    opacity: 0.4;
+  .video-type, .video-meta-box, .video-meta-time, .filter, .title {
+    @include transition(all .35s ease-in-out);
   }
-  .google-map, .wiki {
+  .video-type {
+    background-color: $meta-type-bg;
+    position: absolute;
+    //display: inline-block;
+    width: 80px;
+    height: 80px;
+    //height: 100%;
+    float: left;
+    z-index: 50;
+    cursor: pointer;
+    .video-meta-time {
+      cursor: pointer;
+      letter-spacing: 1.5px;
+      padding: 5px;
+      font-size: 12px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,.44);
+      //pointer-events: none;
+      color: $text;
+    }
+    .img {
+      width: 80px;
+      height: 60px;
+      background-repeat: no-repeat;
+      background-position: top center;
+    }
+    img {
+      width: 60px;
+    }
+  }
+  .video-meta {
+    display: inline-block;
+    margin-left: 80px;
     height: #{$meta-height}px;
-    margin-top: 8px;
-  }
-  .google-map {
-    &:before {
-      display: block;
-      content: ' ';
-      padding-bottom: percentage($meta-height/$meta-width);
-    }
-  }
-  .wiki {
-    .wiki-logo {
-      float: left;
-      margin-top: 15px;
-      max-width: 80px;
-      max-height: 100px;
-      img {
-        width: 100%;
-      }
-    }
-    .text, .title {
-      padding-left: 10px;
-    }
+    width: calc(100% - 80px);
+    cursor: pointer;
     .link {
-      color: #486dff;
+      cursor: pointer;
+      color: $text;
       text-decoration: none;
-      padding: 0 5px;
+      letter-spacing: 1.2px;
+      font-size: 11px;
+      float: right;
+      text-shadow: 1px 1px 2px rgba(0,0,0,.44);
     }
     .title {
-      margin-top: 5px;
-      display: inline-block;
-      color: #fff;
+      //color: $main-color;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      padding: 2px 0 5px 0;
+      line-height: 13px;
+      font-size: 13px;
     }
     .text {
-      margin-top: 5px;
-      line-height: 18px;
-      font-size: 12px;
-      cursor: none;
-      text-decoration: none;
-      color: #fff;
+      font-size: 11px;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
+    }
+    .long-text {
+      display: none;
+      font-size: 13px;
+    }
+    .hide-link {
+      display: none;
+      font-size: 13px;
+      color: $main-color;
+    }
+    // WIKI
+    &.wiki, &.article {
+      width: calc(100% - 80px - 30px);
+      padding: 5px 15px;
+    }
+    // MAP
+    &.map {
+      .title {
+        position: absolute;
+        z-index: 20;
+        padding: 5px 0 0 15px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,.44);
+      }
+      .link {
+        cursor: pointer;
+        position: absolute;
+        right: 5px;
+        z-index: 50;
+        margin: 5px 15px 0;
+      }
+      .filter {
+        background-color: rgba(25,25,25, 0.5);
+        position: absolute;
+        margin-left: -80px;
+        width: #{$meta-width - 10}px;
+        height: #{$meta-height}px;
+        z-index: 5;
+      }
+      .google-map {
+        position: relative;
+        margin-left: -80px;
+        width: #{$meta-width - 10}px;
+        height: #{$meta-height}px;
+        overflow: hidden;
+      }
+    }
+    // INFOGRAPHIC
+    &.infographic {
+      position: relative;
+      margin-left: 0;
+      width: 100%;
+      height: #{$meta-height}px;
+      overflow: hidden;
+      .title {
+        left: 80px;
+        position: absolute;
+        width: 160px;
+        line-height: 15px;
+        //font-size: 11px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        z-index: 20;
+        padding: 5px 0 0 15px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,.44);
+      }
+      .img {
+        position: absolute;
+        vertical-align: middle;
+        width: #{$meta-width - 10}px;
+        z-index: 0;
+      }
+      .filter {
+        background-color: rgba(25,25,25, 0.5);
+        position: absolute;
+        width: #{$meta-width - 10}px;
+        height: #{$meta-height}px;
+        z-index: 5;
+      }
+      .link {
+        position: relative;
+        z-index: 50;
+        margin: 5px 15px 0;
+      }
+    }
+  }
+  .google-map, .wiki {
+    height: #{$meta-height}px;
+  }
+  //.google-map {
+  //  &:before {
+  //    display: block;
+  //    content: ' ';
+  //    padding-bottom: percentage($meta-height/$meta-width);
+  //  }
+  //}
+}
+
+
+.video-label-container {
+  .video-label {
+    @include transition(all .35s ease-in-out);
+    cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    color: red;
+    background: $main-color;
+    border-radius: 30px;
+    width: 25px;
+    height: 25px;
+    pointer-events: none;
+    &.active {
+      opacity: 1;
+      pointer-events: initial;
+    }
+    img {
+      width: 25px;
     }
   }
 }

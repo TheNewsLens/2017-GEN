@@ -15,19 +15,22 @@ export default class VideoPlayer extends Component {
   }
 
   _initVideo(){
+    const {changeVideoData} = this.props;
     let playerInstance = jwplayer("video-player");
     playerInstance.setup({
       file:"/video/GEN_Hackthon.mp4",
       image:"/img/LOGO-01.jpg",
-      "height": 380,
+      "height": 340,
       "width": "100%",
       displaytitle: false,
       controls: true,
       primary: 'html5',
-      mute: true,
+      mute: false,
       autostart: false,
     });
     this.addVideoListener();
+    const video_rect = document.querySelector("#video-player").getBoundingClientRect();
+    changeVideoData({rect: video_rect});
   }
 
   _addVideoListener(){
@@ -42,6 +45,9 @@ export default class VideoPlayer extends Component {
     jwplayer().on('pause complete', (data)=>{
       changeVideoData({isPlaying: false});
     });
+    window.onblur = function() {
+      changeVideoData({isPlaying: false});
+    };
   }
 
   componentDidUpdate(){

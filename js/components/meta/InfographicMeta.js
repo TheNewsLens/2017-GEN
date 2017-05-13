@@ -1,15 +1,14 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import {GOOGLE_MAP_STYLE} from '../../data/googleMap';
 import cx from 'classnames';
 import moment from 'moment';
 
-export default class GoogleMapMeta extends Component {
+export default class InfographicMeta extends Component {
   constructor(props){
     super(props);
-    this.state = {active: false, show: false, map: null};
-    this.initMap = () => this._initMap();
+    this.state = {active: false, show: false};
+    this.initWiki = () => this._initWiki();
     this.onClick = (e) => this._onClick(e);
     this.isNowActive = () => this._isNowActive();
     this.onMouseEnter = (e) => this._onMouseEnter(e);
@@ -17,11 +16,12 @@ export default class GoogleMapMeta extends Component {
     this.toggle = (e) => this._toggle(e);
   }
   componentDidMount(){
-    this.initMap();
+    this.initWiki();
   }
+
   componentDidUpdate(){
     const {scroll, index, showIndex} = this.props;
-    const {active, show, map} = this.state;
+    const {active, show} = this.state;
     if(active !== this.isNowActive()){
       this.setState({active: this.isNowActive()});
       scroll("video-meta-box-"+index);
@@ -29,7 +29,6 @@ export default class GoogleMapMeta extends Component {
     if(showIndex == index){
       if(!show){
         this.setState({show: true});
-        map.setOptions({zoomControl: true});
       }
     }
     if(showIndex == null){
@@ -38,23 +37,7 @@ export default class GoogleMapMeta extends Component {
       }
     }
   }
-  _initMap(){
-    const {meta, index} = this.props;
-    const {value, title, zoom} = meta;
-    // init google map
-    let map = new google.maps.Map(document.getElementById("video-map-"+index), {
-      center: value,
-      zoom: zoom,
-      mapTypeControl: false,
-      scrollwheel: false
-    });
-    // map.setOptions({styles: GOOGLE_MAP_STYLE});
-    let marker = new google.maps.Marker({
-      map: map,
-      position: value,
-      title: title,
-    });
-    this.setState({map: map});
+  _initWiki(){
   }
   _onClick(e){
     const {seekTime, meta} = this.props;
@@ -79,7 +62,7 @@ export default class GoogleMapMeta extends Component {
     return meta.time.start < position && meta.time.end > position;
   }
   _toggle(e){
-    const {show, active, map} = this.state;
+    const {show, active} = this.state;
     if(show){
       if(e.target.tagName != 'A') return false;
     }
@@ -92,36 +75,35 @@ export default class GoogleMapMeta extends Component {
       changeShowIndex(null);
     }else{
       stopPlaying();
-      map.setOptions({zoomControl: true});
       changeShowIndex(index);
     }
   }
+
   render(){
     const {show} = this.state;
     const {index, meta, position} = this.props;
-    const {title} = meta;
     const {top, left} = meta.position;
+    const {title, img} = meta.value;
     const active = meta.time.start < position && meta.time.end > position;
     let time = new Date(null);
     time.setSeconds(meta.time.start);
     return (
-      <div id={"video-meta-box-"+index} className={cx('video-meta-box','map',{'active': active, 'show': show})} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onMouseMove={this.onMouseEnter}>
-        {/*<div className="video-label" style={{top,left}} onClick={this.onClick}>*/}
-          {/*/!*<a href="http://google.com" target="_blank">*!/*/}
-            {/*/!*地圖*!/*/}
-          {/*/!*</a>*!/*/}
-        {/*</div>*/}
-        <div className="video-type google-map" onClick={this.onClick}>
-          <div id={"video-meta-time-"+index} className="video-meta-time">{time.toISOString().substr(14, 5)}</div>
-          <div className="img" style={{backgroundImage: "url('/img/meta/map.png')"}}/>
+      <div id={"video-meta-box-"+index} className={cx('video-meta-box','infographic', {'active': active, 'show': show})} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onMouseMove={this.onMouseEnter}>
+        <div className="video-label" style={{top,left}} onClick={this.onClick}>
+          {/*<a href="http://google.com" target="_blank">*/}
+          {/*Infographic*/}
+          {/*</a>*/}
         </div>
-        <div id={"video-meta-"+index} className="video-meta map" onClick={this.toggle}>
+        <div className="video-type infographic" onClick={this.onClick}>
+          <div id={"video-meta-time-"+index} className="video-meta-time">{time.toISOString().substr(14, 5)}</div>
+          <div className="img" style={{backgroundImage: "url('/img/meta/infographic.png')"}}/>
+        </div>
+        <div id={"video-meta-"+index} className="video-meta infographic" onClick={this.toggle}>
+          {/*<div className="wiki-logo"><img src="/img/wiki_logo.png"/></div>*/}
           <div className="title">{title}</div>
-          <a className="link" target="_blank">{show ? 'HIDE' : 'SHOW MORE'}</a>
+          <img className="img" src={img} />
           <div className="filter"></div>
-          <div id={"video-map-"+index} className="google-map">
-
-          </div>
+          <a className="link" target="_blank">{show ? 'HIDE' : 'SHOW MORE'}</a>
         </div>
       </div>
     )
