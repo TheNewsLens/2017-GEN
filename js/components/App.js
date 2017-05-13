@@ -47,7 +47,7 @@ export default class App extends Component {
         </div>
         <div className="video-info-container">
           <div className="video-info-box">
-            <div className="video-title">nfldnf;alkdfkadnfanskdfklasmdfnk</div>
+            <div className="video-title">【關鍵77秒 】俄羅斯爆炸案｜美聯航強拖乘客下機｜全球死刑執行大減</div>
             <div className="video-view">16,000 views</div>
             <div className="share">
               <img src="/img/share/share.png"/>
